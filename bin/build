@@ -117,13 +117,21 @@ EOF
 
 apt_env_dir=$apt_layer/env
 mkdir -p $apt_env_dir
-echo -n "$apt_layer/usr/bin:$PATH" > $apt_env_dir/PATH
-echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LD_LIBRARY_PATH
-echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LIBRARY_PATH
-echo -n "$apt_layer/usr/include:$apt_layer/usr/include/x86_64-linux-gnu" > $apt_env_dir/INCLUDE_PATH
-cp $apt_env_dir/INCLUDE_PATH $apt_env_dir/CPATH
-cp $apt_env_dir/INCLUDE_PATH $apt_env_dir/CPPPATH
-echo -n "$apt_layer/usr/lib/x86_64-linux-gnu/pkgconfig:$apt_layer/usr/lib/i386-linux-gnu/pkgconfig:$apt_layer/usr/lib/pkgconfig" > $apt_env_dir/PKG_CONFIG_PATH
+echo -n "$apt_layer/usr/bin:$PATH" > $apt_env_dir/PATH.prepend
+echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LD_LIBRARY_PATH.prepend
+echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LIBRARY_PATH.prepend
+echo -n "$apt_layer/usr/include:$apt_layer/usr/include/x86_64-linux-gnu" > $apt_env_dir/INCLUDE_PATH.prepend
+cp $apt_env_dir/INCLUDE_PATH $apt_env_dir/CPATH.prepend
+cp $apt_env_dir/INCLUDE_PATH $apt_env_dir/CPPPATH.prepend
+echo -n "$apt_layer/usr/lib/x86_64-linux-gnu/pkgconfig:$apt_layer/usr/lib/i386-linux-gnu/pkgconfig:$apt_layer/usr/lib/pkgconfig" > $apt_env_dir/PKG_CONFIG_PATH.prepend
+
+echo -n ":" > $apt_env_dir/PATH.delim
+echo -n ":" > $apt_env_dir/LD_LIBRARY_PATH.delim
+echo -n ":" > $apt_env_dir/LIBRARY_PATH.delim
+echo -n ":" > $apt_env_dir/INCLUDE_PATH.delim
+echo -n ":" > $apt_env_dir/CPATH.delim
+echo -n ":" > $apt_env_dir/CPPPATH.delim
+echo -n ":" > $apt_env_dir/PKG_CONFIG_PATH.delim
 
 echo "launch = true" > ${apt_layer}.toml
 echo "build = true" >> ${apt_layer}.toml
