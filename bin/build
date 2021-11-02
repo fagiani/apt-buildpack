@@ -121,8 +121,8 @@ echo -n "$apt_layer/usr/bin:$PATH" > $apt_env_dir/PATH.prepend
 echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LD_LIBRARY_PATH.prepend
 echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LIBRARY_PATH.prepend
 echo -n "$apt_layer/usr/include:$apt_layer/usr/include/x86_64-linux-gnu" > $apt_env_dir/INCLUDE_PATH.prepend
-cp $apt_env_dir/INCLUDE_PATH $apt_env_dir/CPATH.prepend
-cp $apt_env_dir/INCLUDE_PATH $apt_env_dir/CPPPATH.prepend
+cp $apt_env_dir/INCLUDE_PATH.prepend $apt_env_dir/CPATH.prepend
+cp $apt_env_dir/INCLUDE_PATH.prepend $apt_env_dir/CPPPATH.prepend
 echo -n "$apt_layer/usr/lib/x86_64-linux-gnu/pkgconfig:$apt_layer/usr/lib/i386-linux-gnu/pkgconfig:$apt_layer/usr/lib/pkgconfig" > $apt_env_dir/PKG_CONFIG_PATH.prepend
 
 echo -n ":" > $apt_env_dir/PATH.delim
