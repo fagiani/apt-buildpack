@@ -11,7 +11,7 @@ This buildpack is based on the [heroku-buildpack-apt](https://github.com/heroku/
 
 This buildpack is not meant to be used on its own, and instead should be in used in combination with other buildpacks.
 
-Include a list of `apt` package names to be installed in a file named `Aptfile`
+Include a list of `apt` package names to be installed in a file named `Aptfile`; be aware that line ending should be LF, not CRLF.
 
 The buildpack automatically downloads and installs the packages when you run a build:
 
