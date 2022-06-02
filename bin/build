@@ -107,8 +107,8 @@ topic "Writing profile script"
 mkdir -p $apt_layer/.profile.d
 cat <<EOF >$apt_layer/.profile.d/000_apt.sh
 export PATH="$apt_layer/usr/bin:\$PATH"
-export LD_LIBRARY_PATH="$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib:\$LD_LIBRARY_PATH"
-export LIBRARY_PATH="$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib:\$LIBRARY_PATH"
+export LD_LIBRARY_PATH="$apt_layer/lib/x86_64-linux-gnu:$apt_layer/lib/i386-linux-gnu:$apt_layer/lib:$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib:\$LD_LIBRARY_PATH"
+export LIBRARY_PATH="$apt_layer/lib/x86_64-linux-gnu:$apt_layer/lib/i386-linux-gnu:$apt_layer/lib:$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib:\$LIBRARY_PATH"
 export INCLUDE_PATH="$apt_layer/usr/include:$apt_layer/usr/include/x86_64-linux-gnu:\$INCLUDE_PATH"
 export CPATH="\$INCLUDE_PATH"
 export CPPPATH="\$INCLUDE_PATH"
@@ -118,8 +118,8 @@ EOF
 apt_env_dir=$apt_layer/env
 mkdir -p $apt_env_dir
 echo -n "$apt_layer/usr/bin:$PATH" > $apt_env_dir/PATH.prepend
-echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LD_LIBRARY_PATH.prepend
-echo -n "$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LIBRARY_PATH.prepend
+echo -n "$apt_layer/lib/x86_64-linux-gnu:$apt_layer/lib/i386-linux-gnu:$apt_layer/lib:$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LD_LIBRARY_PATH.prepend
+echo -n "$apt_layer/lib/x86_64-linux-gnu:$apt_layer/lib/i386-linux-gnu:$apt_layer/lib:$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib" > $apt_env_dir/LIBRARY_PATH.prepend
 echo -n "$apt_layer/usr/include:$apt_layer/usr/include/x86_64-linux-gnu" > $apt_env_dir/INCLUDE_PATH.prepend
 cp $apt_env_dir/INCLUDE_PATH.prepend $apt_env_dir/CPATH.prepend
 cp $apt_env_dir/INCLUDE_PATH.prepend $apt_env_dir/CPPPATH.prepend
