@@ -70,7 +70,7 @@ else
   mkdir -p "$APT_CACHE_DIR/archives/partial"
   mkdir -p "$APT_STATE_DIR/lists/partial"
   mkdir -p "$APT_SOURCELIST_DIR"   # make dir for sources
-  cp -f "Aptfile" "$apt_layer/Aptfile"
+  cp -f Aptfile "$apt_layer"/Aptfile
   cat "/etc/apt/sources.list" > "$APT_SOURCES"    # no cp here
   # add custom repositories from Aptfile to sources.list
   # like>>    :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
@@ -139,13 +139,13 @@ else
   cpath="\$INCLUDE_PATH"
   echo "CPATH=$cpath" | indent
   echo "export CPATH=\"$cpath\"" >> $exports_path
-  cp $apt_env_dir/INCLUDE_PATH.prepend $apt_env_dir/CPATH.prepend
+  cp "$apt_env_dir"/INCLUDE_PATH.prepend "$apt_env_dir"/CPATH.prepend
   echo -n ":" > $apt_env_dir/CPATH.delim
 
   cpppath="\$INCLUDE_PATH"
   echo "CPPPATH=$cpppath" | indent
   echo "export CPPPATH=\"$cpppath\"" >> $exports_path
-  cp $apt_env_dir/INCLUDE_PATH.prepend $apt_env_dir/CPPPATH.prepend
+  cp "$apt_env_dir"/INCLUDE_PATH.prepend "$apt_env_dir"/CPPPATH.prepend
   echo -n ":" > $apt_env_dir/CPPPATH.delim
 
   pkg_config_path=$apt_layer/usr/lib/x86_64-linux-gnu/pkgconfig:$apt_layer/usr/lib/i386-linux-gnu/pkgconfig:$apt_layer/usr/lib/pkgconfig
