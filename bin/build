@@ -29,7 +29,7 @@ function indent() {
 
 layers_dir="$1"
 env_dir="$2/env"
-plan_path="$3"
+# plan_path="$3"
 
 if compgen -G "${env_dir}/*" > /dev/null; then
   for var in ${env_dir}/*; do
