@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# shellcheck source=.init.sh
+. "$(dirname "${BASH_SOURCE[0]}")/.init.sh"
+cd ..
+
+log::info "=> Running shellcheck $(shellcheck -V | grep version:)"
+
+log::info "     ./bin/*"
+# shellcheck disable=SC2046
+shellcheck -a $(find ./bin -maxdepth 1 -type f -exec awk 'FNR == 1 && /^#!.*bash/{print FILENAME}' {} +) # all files with a bash shebang
+
+gotest_flags=(-race)
+if [[ ${1-} == "-v" ]]; then
+    gotest_flags+=("-v")
+fi
+
+log::info "=> Running go test"
+# shellcheck disable=SC2046
+{
+    go test "${gotest_flags[@]}" ./...
+    print_pass_fail "$?"
+} | indent 5
