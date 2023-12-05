@@ -1,10 +1,10 @@
-api = "0.4"
+api = "0.7"
 
 [buildpack]
-id = "fagiani/apt"
-version = "0.2.5"
+id = "skribble/apt"
+version = "1.0"
 name = "apt Packages Buildpack"
-homepage = "https://github.com/fagiani/apt-buildpack"
+homepage = "https://github.com/BlockSigner/apt-buildpack"
 description = "Installs apt packages for further builds and runtime"
 keywords = ["apt", "packages", "ubuntu"]
 
