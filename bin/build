@@ -155,7 +155,8 @@ else
   echo -n ":" > $apt_env_dir/PKG_CONFIG_PATH.delim
 fi
 
-echo "launch = true" > ${apt_layer}.toml
+echo "[types]" > ${apt_layer}.toml
+echo "launch = true" >> ${apt_layer}.toml
 echo "build = true" >> ${apt_layer}.toml
 echo "cache = true" >> ${apt_layer}.toml
 
