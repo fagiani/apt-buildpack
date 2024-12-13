@@ -1,8 +1,8 @@
-api = "0.4"
+api = "0.10"
 
 [buildpack]
 id = "fagiani/apt"
-version = "0.2.5"
+version = "0.2.6"
 name = "apt Packages Buildpack"
 homepage = "https://github.com/fagiani/apt-buildpack"
 description = "Installs apt packages for further builds and runtime"
@@ -22,3 +22,6 @@ id = "io.buildpacks.stacks.bionic"
 
 [[stacks]]
 id = "io.buildpacks.stacks.jammy"
+
+[[stacks]]
+id = "*"
