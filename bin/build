@@ -71,12 +71,15 @@ else
   mkdir -p "$APT_STATE_DIR/lists/partial"
   mkdir -p "$APT_SOURCELIST_DIR"   # make dir for sources
   cp -f Aptfile "$apt_layer"/Aptfile
-  cat "/etc/apt/sources.list" > "$APT_SOURCES"    # no cp here
+cat "/etc/apt/sources.list" > "$APT_SOURCES"    # no cp here
   # add custom repositories from Aptfile to sources.list
   # like>>    :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
   if grep -q -e "^:repo:" Aptfile; then
-    topic "Adding custom repositories"
-    cat Aptfile | grep -s -e "^:repo:" | sed 's/^:repo:\(.*\)\s*$/\1/g' >> $APT_SOURCES
+    print_topic "Adding custom repositories"
+    {
+      grep -s -e "^:repo:" Aptfile | sed 's/^:repo:\(.*\)\s*$/\1/g'
+      cat "$APT_SOURCES"
+    } > /tmp/sources.list && mv /tmp/sources.list "$APT_SOURCES"
   fi
 
   APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
