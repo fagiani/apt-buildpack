@@ -27,6 +27,9 @@ jobs:
           curl -sSL https://github.com/sclevine/yj/releases/latest/download/yj-linux-amd64 -o /usr/local/bin/yj
           chmod +x /usr/local/bin/yj
 
+      - name: Setup crane
+        uses: imjasonh/setup-crane@v0.4
+
       - id: setup-pack
         uses: buildpacks/github-actions/setup-pack@v5.7.4
 
