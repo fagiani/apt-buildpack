@@ -5,6 +5,10 @@ on:
     types:
       - published
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   register:
     name: Package, Publish, and Register
@@ -18,8 +22,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - id: setup-tools
         name: Install yj
