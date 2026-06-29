@@ -2,7 +2,7 @@ api = "0.10"
 
 [buildpack]
 id = "fagiani/apt"
-version = "0.2.6"
+version = "0.2.7"
 name = "apt Packages Buildpack"
 homepage = "https://github.com/fagiani/apt-buildpack"
 description = "Installs apt packages for further builds and runtime"
