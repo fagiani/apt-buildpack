@@ -21,6 +21,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
 
+      - id: setup-tools
+        name: Install yj
+        run: |
+          curl -sSL https://github.com/sclevine/yj/releases/latest/download/yj-linux-amd64 -o /usr/local/bin/yj
+          chmod +x /usr/local/bin/yj
+
       - id: setup-pack
         uses: buildpacks/github-actions/setup-pack@v5.7.4
 
@@ -28,11 +34,11 @@ jobs:
         run: |
           #!/usr/bin/env bash
           set -euo pipefail
-          BP_ID="$(cat buildpack.toml | yj -t | jq -r .buildpack.id)"
-          VERSION="$(cat buildpack.toml | yj -t | jq -r .buildpack.version)"
+          BP_ID="$(yj -t < buildpack.toml | jq -r .buildpack.id)"
+          VERSION="$(yj -t < buildpack.toml | jq -r .buildpack.version)"
           PACKAGE="${REPO}/$(echo "$BP_ID" | sed 's/\//_/g')"
-          pack buildpack package --publish ${PACKAGE}:${VERSION}
-          DIGEST="$(crane digest ${PACKAGE}:${VERSION})"
+          pack buildpack package --publish "${PACKAGE}:${VERSION}"
+          DIGEST="$(crane digest "${PACKAGE}:${VERSION}")"
           echo "bp_id=$BP_ID" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "address=${PACKAGE}@${DIGEST}" >> "$GITHUB_OUTPUT"
