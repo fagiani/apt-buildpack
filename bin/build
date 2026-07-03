@@ -74,7 +74,9 @@ else
   mkdir -p "$APT_SOURCEPARTS_DIR" # make dir for source parts
   cp -f Aptfile "$apt_layer"/Aptfile
   cat "/etc/apt/sources.list" > "$APT_SOURCES"    # no cp here
-  cp /etc/apt/sources.list.d/* "$APT_SOURCEPARTS_DIR"/
+  if compgen -G "/etc/apt/sources.list.d/*" > /dev/null; then
+    cp /etc/apt/sources.list.d/* "$APT_SOURCEPARTS_DIR"/
+  fi
   # add custom repositories from Aptfile to sources.list
   # like>>    :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
   if grep -q -e "^:repo:" Aptfile; then
