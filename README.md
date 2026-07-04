@@ -30,6 +30,24 @@ $ pack build --buildpack fagiani/apt myapp
     # or add custom apt repos (only required if using packages outside of the standard Ubuntu APT repositories)
     :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
 
+## Custom Repository Order
+
+By default, custom repositories defined with `:repo:` in your `Aptfile` are **appended** after the system's default repositories. You can control this behavior using the `APT_CUSTOM_REPOS_MODE` environment variable:
+
+| Value | Behavior |
+|-------|----------|
+| `append` (default) | System repos first, then custom repos |
+| `prepend` | Custom repos first, then system repos |
+| `custom-only` | Only custom repos are used (system repos are excluded entirely) |
+
+Example:
+
+```
+$ pack build --buildpack fagiani/apt --env APT_CUSTOM_REPOS_MODE=prepend myapp
+```
+
+> **Note:** On Ubuntu 24.04-based builders (e.g., `heroku/builder:24`), system repositories use the deb822 format in `/etc/apt/sources.list.d/`. In `append` and `prepend` modes, custom repos are placed in `sources.list` alongside the system's `sources.list.d/` entries. In `custom-only` mode, both `sources.list` and `sources.list.d/` are replaced with only your custom repositories.
+
 ## License
 
 MIT
