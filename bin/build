@@ -96,7 +96,7 @@ else
           { echo "$CUSTOM_REPOS"; echo ""; echo "$SYSTEM_SOURCES_ACTIVE"; } > "$APT_SOURCES"
         else
           # deb822 format (builder:24) — system repos in sources.list.d/
-          # Custom repos go in sources.list which apt reads before sources.list.d/
+          # Put custom repos in sources.list (apt reads it before sources.list.d/)
           echo "$CUSTOM_REPOS" > "$APT_SOURCES"
         fi
         ;;
@@ -113,8 +113,9 @@ else
           { echo "$SYSTEM_SOURCES_ACTIVE"; echo ""; echo "$CUSTOM_REPOS"; } > "$APT_SOURCES"
         else
           # deb822 format (builder:24) — system repos in sources.list.d/
-          # Custom repos go in sources.list; system repos are already in sources.list.d/
-          echo "$CUSTOM_REPOS" > "$APT_SOURCES"
+          # Put custom repos in a file that sorts after system sources (zzz-custom.list)
+          : > "$APT_SOURCES"  # empty sources.list
+          echo "$CUSTOM_REPOS" > "$APT_SOURCEPARTS_DIR/zzz-custom.list"
         fi
         ;;
     esac

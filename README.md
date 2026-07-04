@@ -30,6 +30,9 @@ $ pack build --buildpack fagiani/apt myapp
     # or add custom apt repos (only required if using packages outside of the standard Ubuntu APT repositories)
     :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
 
+    # for repos without a GPG key in the builder, use [trusted=yes] to skip signature verification
+    :repo:deb [trusted=yes] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu jammy main
+
 ## Custom Repository Order
 
 By default, custom repositories defined with `:repo:` in your `Aptfile` are **appended** after the system's default repositories. You can control this behavior using the `APT_CUSTOM_REPOS_MODE` environment variable:
