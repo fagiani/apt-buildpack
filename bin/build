@@ -30,6 +30,7 @@ function indent() {
 layers_dir="$1"
 env_dir="$2/env"
 plan_path="$3"
+arch_prefix=$(uname -m)
 
 if compgen -G "${env_dir}/*" > /dev/null; then
   for var in ${env_dir}/*; do
@@ -123,7 +124,7 @@ else
   echo -n "$path:$PATH" > $apt_env_dir/PATH.prepend
   echo -n ":" > $apt_env_dir/PATH.delim
 
-  ld_library_path=$apt_layer/lib/x86_64-linux-gnu:$apt_layer/lib/i386-linux-gnu:$apt_layer/lib:$apt_layer/usr/lib/x86_64-linux-gnu:$apt_layer/usr/lib/i386-linux-gnu:$apt_layer/usr/lib
+  ld_library_path=$apt_layer/lib/${arch_prefix}-linux-gnu:$apt_layer/usr/lib/${arch_prefix}-linux-gnu:$apt_layer/usr/lib
   echo "LD_LIBRARY_PATH=$ld_library_path" | indent
   echo "export LD_LIBRARY_PATH=\"$ld_library_path:\$LD_LIBRARY_PATH\"" >> $exports_path
   echo -n "$ld_library_path" > $apt_env_dir/LD_LIBRARY_PATH.prepend
@@ -135,7 +136,7 @@ else
   echo -n "$library_path" > $apt_env_dir/LIBRARY_PATH.prepend
   echo -n ":" > $apt_env_dir/LIBRARY_PATH.delim
 
-  include_path=$apt_layer/usr/include:$apt_layer/usr/include/x86_64-linux-gnu
+  include_path=$apt_layer/usr/include:$apt_layer/usr/include/${arch_prefix}-linux-gnu
   echo "INCLUDE_PATH=$include_path" | indent
   echo "export INCLUDE_PATH=\"$include_path:\$INCLUDE_PATH\"" >> $exports_path
   echo -n "$include_path" > $apt_env_dir/INCLUDE_PATH.prepend
@@ -153,7 +154,7 @@ else
   cp "$apt_env_dir"/INCLUDE_PATH.prepend "$apt_env_dir"/CPPPATH.prepend
   echo -n ":" > $apt_env_dir/CPPPATH.delim
 
-  pkg_config_path=$apt_layer/usr/lib/x86_64-linux-gnu/pkgconfig:$apt_layer/usr/lib/i386-linux-gnu/pkgconfig:$apt_layer/usr/lib/pkgconfig
+  pkg_config_path=$apt_layer/usr/lib/${arch_prefix}-linux-gnu/pkgconfig:$apt_layer/usr/lib/pkgconfig
   echo "PKG_CONFIG_PATH=$pkg_config_path" | indent
   echo "export PKG_CONFIG_PATH=\"$pkg_config_path:\$PKG_CONFIG_PATH\"" >> $exports_path
   echo -n "$pkg_config_path" > $apt_env_dir/PKG_CONFIG_PATH.prepend
