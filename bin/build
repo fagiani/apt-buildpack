@@ -124,7 +124,7 @@ else
   echo -n "$path:$PATH" > $apt_env_dir/PATH.prepend
   echo -n ":" > $apt_env_dir/PATH.delim
 
-  ld_library_path=$apt_layer/lib/${arch_prefix}-linux-gnu:$apt_layer/usr/lib/${arch_prefix}-linux-gnu:$apt_layer/usr/lib
+  ld_library_path=$apt_layer/lib/${arch_prefix}-linux-gnu:$apt_layer/lib:$apt_layer/usr/lib/${arch_prefix}-linux-gnu:$apt_layer/usr/lib
   echo "LD_LIBRARY_PATH=$ld_library_path" | indent
   echo "export LD_LIBRARY_PATH=\"$ld_library_path:\$LD_LIBRARY_PATH\"" >> $exports_path
   echo -n "$ld_library_path" > $apt_env_dir/LD_LIBRARY_PATH.prepend
