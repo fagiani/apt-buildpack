@@ -74,15 +74,58 @@ else
   mkdir -p "$APT_SOURCELIST_DIR"   # make dir for sources
   mkdir -p "$APT_SOURCEPARTS_DIR" # make dir for source parts
   cp -f Aptfile "$apt_layer"/Aptfile
-  cat "/etc/apt/sources.list" > "$APT_SOURCES"    # no cp here
-  if compgen -G "/etc/apt/sources.list.d/*" > /dev/null; then
-    cp /etc/apt/sources.list.d/* "$APT_SOURCEPARTS_DIR"/
-  fi
+
   # add custom repositories from Aptfile to sources.list
   # like>>    :repo:deb http://cz.archive.ubuntu.com/ubuntu artful main universe
   if grep -q -e "^:repo:" Aptfile; then
     topic "Adding custom repositories"
-    cat Aptfile | grep -s -e "^:repo:" | sed 's/^:repo:\(.*\)\s*$/\1/g' >> $APT_SOURCES
+
+    # Capture custom repositories
+    CUSTOM_REPOS=$(grep -s -e "^:repo:" Aptfile | sed 's/^:repo:\(.*\)\s*$/\1/g')
+
+    # Check if system sources.list has actual repo lines (not just comments)
+    SYSTEM_SOURCES_ACTIVE=$(grep -v -e '^\s*#' -e '^\s*$' /etc/apt/sources.list 2>/dev/null || true)
+
+    # Determine repository order
+    case "${APT_CUSTOM_REPOS_MODE:-append}" in
+      "prepend")
+        if compgen -G "/etc/apt/sources.list.d/*" > /dev/null; then
+          cp /etc/apt/sources.list.d/* "$APT_SOURCEPARTS_DIR"/
+        fi
+        if [ -n "$SYSTEM_SOURCES_ACTIVE" ]; then
+          # Traditional format (builder:22) — system repos in sources.list
+          { echo "$CUSTOM_REPOS"; echo ""; echo "$SYSTEM_SOURCES_ACTIVE"; } > "$APT_SOURCES"
+        else
+          # deb822 format (builder:24) — system repos in sources.list.d/
+          # Put custom repos in sources.list (apt reads it before sources.list.d/)
+          echo "$CUSTOM_REPOS" > "$APT_SOURCES"
+        fi
+        ;;
+      "custom-only")
+        echo "$CUSTOM_REPOS" > "$APT_SOURCES"
+        # Do not copy sources.list.d — only custom repos should be used
+        ;;
+      *)  # Default to append
+        if compgen -G "/etc/apt/sources.list.d/*" > /dev/null; then
+          cp /etc/apt/sources.list.d/* "$APT_SOURCEPARTS_DIR"/
+        fi
+        if [ -n "$SYSTEM_SOURCES_ACTIVE" ]; then
+          # Traditional format (builder:22) — system repos in sources.list
+          { echo "$SYSTEM_SOURCES_ACTIVE"; echo ""; echo "$CUSTOM_REPOS"; } > "$APT_SOURCES"
+        else
+          # deb822 format (builder:24) — system repos in sources.list.d/
+          # Put custom repos in a file that sorts after system sources (zzz-custom.list)
+          : > "$APT_SOURCES"  # empty sources.list
+          echo "$CUSTOM_REPOS" > "$APT_SOURCEPARTS_DIR/zzz-custom.list"
+        fi
+        ;;
+    esac
+  else
+    # No custom repos — use system defaults as-is
+    cat "/etc/apt/sources.list" > "$APT_SOURCES"
+    if compgen -G "/etc/apt/sources.list.d/*" > /dev/null; then
+      cp /etc/apt/sources.list.d/* "$APT_SOURCEPARTS_DIR"/
+    fi
   fi
 
   APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
